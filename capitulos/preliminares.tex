@@ -1,0 +1,562 @@
+% !TeX root = ../libro.tex
+% !TeX encoding = utf8
+
+%\setchapterpreamble[c][0.75\linewidth]{%
+%	\sffamily
+%  Breve resumen del capítulo. TODO
+%	\par\bigskip
+%}
+
+\chapter{Preliminares}\label{ch:primer-capitulo}
+
+En este primer capítulo se introducirán las herramientas matemáticas necesarias para el desarrollo de la teoría de códigos que se pretende abordar en este trabajo. Empezaremos con una introducción a la teoría de anillos e ideales, comentando algunas de sus propiedades más importantes. Después, estudiaremos los cuerpos finitos, los cuales son esenciales para la construcción de códigos. También estudiaremos los cuerpos de fracciones, que serán fundamentales para la construcción de códigos convolucionales. Por último, se dará una breve introducción a la teoría de módulos.   
+
+Muchos de estos resultados son muy conocidos y en la mayoría de los casos se omitirán las demostraciones de los mismos. Las principales fuentes consultadas para el desarrollo de este capítulo han sido \cite{knapp2006basic}y \cite{Huffman_Pless_2010}.
+
+\section{Anillos}
+
+\begin{definicion} \label{def:anillo}
+    Un \emph{anillo} $(\mathcal{A},+,\cdot)$ es un conjunto $\mathcal{A}$ con dos operaciones binarias $\mathcal{A}\times \mathcal{A} \rightarrow \mathcal{A}$ \ llamadas suma $(+)$ y producto $(\cdot)$, que verifican las siguientes propiedades:
+
+    \begin{enumerate}
+        \item Propiedad asociativa de la suma: $$ a + (b + c) = (a + b) + c \ \ \forall a,b,c \in \mathcal{A}.$$
+        \item Existencia de un elemento neutro de la suma: $$ \exists 0 \in A : 0 + a = a + 0 = a \ \ \ \forall a \in \mathcal{A}.$$
+        \item Existencia de un elemento inverso para la suma: $$ \forall a \in \mathcal{A} \ \exists -a \in \mathcal{A} : a + (-a) = (-a) + a = 0.$$
+        \item Propiedad conmutativa de la suma: $$ a + b = b + a \ \ \forall a,b \in \mathcal{A}.$$
+        \item Propiedad asociativa del producto: $$ a \cdot (b\cdot c) = (a\cdot b)\cdot c \ \ \forall a,b,c \in \mathcal{A}.$$
+        \item Propiedad distributiva del producto: $$ a\cdot(b+c) = a\cdot b + a\cdot c, \ \ (a+b)\cdot c = a\cdot c + b\cdot c \ \ \forall a,b,c \in \mathcal{A}.$$
+    \end{enumerate}
+
+    Diremos que un anillo es \emph{conmutativo} si se verifica: $$a\cdot b = b\cdot a \ \ \forall a,b \in \mathcal{A}.$$
+\end{definicion}
+
+Un tipo de anillo destacado es el siguiente.
+
+\begin{definicion}
+    Un anillo $\mathcal{A}$ se dice \emph{unitario} si existe un elemento $1 \in \mathcal{A}$ tal que \\ $a\cdot1 = 1\cdot a = a \ \ \forall a \in \mathcal{A}$. Lo denotaremos \emph{elemento unidad}.
+\end{definicion}
+
+El conjunto de los elementos unidad de un anillo forman un \emph{grupo} con respecto a la operación producto. A este grupo lo llamaremos \emph{grupo de unidades} de $\mathcal{A}$ y se denotará por $\mathcal{U}(\mathcal{A})$.
+
+\begin{ejemplo} Algunos ejemplos de anillos son los siguientes.
+    \begin{itemize}
+        \item El conjunto de los números enteros $\mathds{Z}$ es un anillo conmutativo y unitario.
+        \item Los enteros de Gauss $\mathds{Z}[i] = \{a + bi : a,b \in \mathds{Z}\}$ forman también un anillo conmutativo y unitario.
+        \item El conjunto de las matrices cuadradas con coeficientes reales $\mathcal{M}_n(\mathbb{R})$ forman un anillo con las operaciones de la suma y el producto de matrices. Tiene elemento unidad (la matriz identidad) y es no conmutativo.
+    \end{itemize}
+\end{ejemplo}
+
+
+Dado un anillo $\mathcal{A}$ unitario podría darse que el elemento neutro y el elemento unidad coincidan. En ese caso, el anillo $\mathcal{A}$ tendrá un único elemento y diremos que el anillo es \emph{trivial}. 
+
+\begin{definicion}
+Dado un elemento $a \in \mathcal{A}$ de un anillo unitario, diremos que es \emph{unidad} si existe otro elemento $a^{-1} \in \mathcal{A}$ de forma que $a\cdot a^{-1} = a^{-1}\cdot a = 1$. En tal caso, $a^{-1}$ es único y lo llamaremos \emph{elemento inverso} de $a$.
+\end{definicion}
+
+Claramente, el $0$ no puede tener elemento inverso, pues cualquier otro elemento que multipliquemos por él, nos dará como resultado $0$. 
+
+\begin{definicion}
+    Diremos que $\mathcal{A}$ es un \emph{anillo de división} si todo elemento $a \in \mathcal{A}$ distinto de $0$ tiene inverso.
+\end{definicion}
+
+\begin{definicion}
+    Los \emph{divisores de cero} en un anillo $\mathcal{A}$ son los elementos $a,b \in \mathcal{A}$ tales que $a\cdot b = 0$.
+\end{definicion}
+
+Los anillos conmutativos con $1 \neq 0$ que no contengan divisores de cero se denominarán \emph{dominios de integridad} (DI).
+
+En un dominio de integridad se da la propiedad de \emph{cancelación}.
+
+\begin{proposicion}
+    Sea $\mathcal{A}$ un dominio de integridad, entonces si $a \neq 0$ \ y \ $ax = ay$, se verifica $x = y$.
+\end{proposicion}
+
+\begin{proof}
+    $ax = ay \Rightarrow a(x-y) = 0$, por ser $\mathcal{A}$ dominio de integridad y $a \neq 0$ se tiene que $x-y = 0 \Rightarrow x=y$.
+\end{proof}
+
+\begin{definicion}
+Sea $\mathcal{A}$ un anillo unitario. Se define su \emph{característica} como el entero positivo más pequeño $n$ tal que $ 1 + {\overset {n)}{\ldots }}+1=0$. Si no existe tal $n$ se dice que la característica de $\mathcal{A}$ es $0$.
+\end{definicion}
+
+\begin{definicion}
+    Un \emph{subanillo} $\mathcal{B}$ de $\mathcal{A}$ es un subconjunto $\mathcal{B} \subset \mathcal{A}$ que es anillo con las operaciones heredadas de $\mathcal{A}$.
+\end{definicion}
+
+\begin{definicion}
+Dados $\mathcal{A},\mathcal{B}$ dos anillos unitarios, una aplicación $f: \mathcal{A} \rightarrow B$ se dice \emph{homomorfismo} de anillos si \ $\forall a,b \in \mathcal{A}$ se tiene:
+$$f(a + b) = f(a) + f(b), f(ab) = f(a)f(b) \text{ y } f(1_\mathcal{A}) = 1_\mathcal{B}.$$
+\end{definicion}
+
+\begin{definicion}
+Un subconjunto $I$ no vacío de un anillo $\mathcal{A}$ es un \emph{ideal por la izquierda} si:
+    \begin{enumerate}
+        \item $I$ es un subgrupo aditivo de $\mathcal{A}$.
+        \item El producto por la izquierda de un elemento de $I$ por otro elemento de $\mathcal{A}$ está en $I$, es decir, $a\cdot x \in I$, $\forall (a,x) \in \mathcal{A} \times I.$
+    \end{enumerate}
+    Y es un \emph{ideal por la derecha si}: 
+    \begin{enumerate}
+        \item $I$ es un subgrupo aditivo de $\mathcal{A}$.
+        \item El producto por la derecha de un elemento de $I$ por otro elemento de $\mathcal{A}$ está en $I$, es decir, $x\cdot a \in I$, $\forall (a,x) \in \mathcal{A} \times I.$
+    \end{enumerate}
+    Un \emph{ideal bilátero} es un ideal por la derecha y por la izquierda. En un anillo conmutativo, las nociones de ideal por la derecha, de ideal por la izquierda y de ideal bilátero coinciden y simplemente hablaremos de ideal.
+\end{definicion}
+
+\begin{definicion}
+Diremos que un anillo $\mathcal{A}$ es simple si no contiene ideales biláteros distintos de $\mathcal{A}$ y $\{0\}$.
+\end{definicion}
+
+\begin{ejemplo} Algunos ejemplos de ideales son los siguientes.
+    \begin{itemize}
+        \item $\{0\}$ y $\mathcal{A}$ son ideales de $\mathcal{A}$. De hecho, si $1 \in I$, entonces $\mathcal{A} = I$.
+        \item Sea $n\mathds{Z} = \{n\cdot a : a \in \mathds{Z}\}, n \in \mathds{N}$, el conjunto de los múltiplos de $n$. Entonces $n\mathds{Z}$ es un ideal, pues todo número entero multiplicado por $n$ es un múltiplo suyo.
+    \end{itemize}
+\end{ejemplo}
+
+Dado un ideal bilátero $I$ de un anillo $\mathcal{A}$, es posible definir una relación de equivalencia. Sean $a,b \in \mathcal{A}$, la relación $a\R b \Leftrightarrow a - b \in I$ es de equivalencia. Esta relación nos permite definir el conjunto cociente $A/I$, de las clases de equivalencia obtenidas a través de ella. Dado un elemento $a \in I$, su clase de equivalencia viene dada por: $$ [a] = a + I = \{a + x : x \in I\}.$$
+
+Las propiedades de ideal hacen que el conjunto cociente $A/I$ sea un anillo, al que llamaremos \emph{anillo cociente}, con las siguientes operaciones (que están bien definidas):
+\begin{itemize}
+    \item Suma: $(a + I) + (b + I) = (a + b) + I$.
+    \item Producto $(a + I)\cdot(b + I) = (ab) + I$.
+\end{itemize}
+
+Un ideal puede ser generado por un \emph{subconjunto}. Sea $\emptyset \neq S \subset \mathcal{A}$ un subconjunto, entonces el ideal generado por $S$ en $\mathcal{A}$ es: 
+$$I(S) = \{x_1h_1 + \cdots x_rh_r: h_i \in I, x_i \in \mathcal{A}\} \Leftrightarrow I(S) = \bigcap_{I_i \supset S} I_i. \ I_i \text{ ideal de }\mathcal{A}.$$
+Es decir, $I(S)$ es el menor ideal de $\mathcal{A}$ que contiene a $S$.
+
+    \begin{itemize}
+    \item \emph{Ideal principal:} El ideal es generado por un elemento, $bA = (b) = \{ab : a \in \mathcal{A}\}$.
+    \item \emph{Ideal finitamente generado:} El ideal es generado por un número finito de elementos, $S = \{b_1,\dots,b_n\}$: $$I(S) = (b_1,\dots,b_n)\mathcal{A} = \{x_1b_1 + \cdots + x_nb_n : x_i \in \mathcal{A}\}.$$
+    \end{itemize}
+\begin{definicion}
+    Llamaremos \emph{dominio de ideales principales} (DIP) a un dominio de integridad en el que todos sus ideales son principales.
+\end{definicion}
+
+
+\begin{teorema}[Forma Normal de Smith]
+Sea $R$ un dominio de ideales principales y sea $A \in \mathcal{M}_{k \times n}(R)$ una matriz no nula con coeficientes en $R$. Entonces $A = CDB$, donde $B \in GL_n(R), C \in GL_k(R)$ y $D \in \mathcal{M}_{k \times n}(R)$, con $$ D =
+    \begin{pmatrix}
+    \alpha_1 & 0      & \cdots & 0      & \cdots & 0 \\
+    0        & \alpha_2 & \cdots & 0      & \cdots & 0 \\
+    \vdots   & \vdots & \ddots & \vdots &        & \vdots \\
+    0        & 0      & \cdots & \alpha_m & \cdots & 0 \\
+    \vdots   & \vdots &        & \vdots & \ddots & \vdots \\
+    0        & 0      & \cdots & 0      & \cdots & 0 \\
+    \end{pmatrix}$$ para algún $m \leq \min\{n,k\}$ y elementos $\alpha_1,\dots,\alpha_m \in R$ no nulos tales que \\ $\alpha_i \ | \ \alpha_{i+1}$, $\forall i \in \{1,\dots,m-1\}.$
+\end{teorema}
+
+La matriz $D$ del teorema anterior recibe el nombre de la \emph{Forma Normal de Smith} de la matriz $A$.
+
+\section{Cuerpos}
+
+\begin{definicion}
+    Un cuerpo $(K,+,\cdot)$ es un \emph{anillo conmutativo} $K$ cuyo grupo de unidades $\mathcal{U}(K)$ es $ K\setminus\{0\}$. Diremos que un cuerpo es \emph{finito} si tiene un número finito de elementos.
+\end{definicion}
+
+Observemos que estamos suponiendo que forzosamente un cuerpo nunca es el anillo trivial $\{0\}$. En general, los cuerpos finitos con $q$ elementos los denotaremos por $\mathbb{F}_q$.
+
+\begin{definicion}
+    Sea $F$ un subanillo de un cuerpo $K$, que es, a su vez, un cuerpo. Diremos que $F$ es un \emph{subcuerpo} de $K$. Se dice también que $F \leq K$ es una \emph{extensión de cuerpos}.
+\end{definicion}
+
+
+El siguiente teorema recoge algunas de las propiedades más básicas e importantes de los cuerpos finitos.
+
+\begin{teorema}\label{th:cf}
+    Sea $\mathbb{F}_q$ un cuerpo finito con $q$ elementos. Entonces se verifican las siguientes afirmaciones:
+    \begin{enumerate}
+        \item[(i)] $|\mathbb{F}_q| = p^n$, para algún número primo $p$ y algún entero positivo $n$.
+        \item[(ii)]  $\mathbb{F}_q$ contiene al subcuerpo $\mathbb{F}_p$.
+        \item[(iii)] $\mathbb{F}_q$ es un espacio vectorial sobre $\mathbb{F}_p$ de dimensión $n$ y hay $q^n$ vectores en el espacio vectorial de dimensión $n$ sobre $\mathbb{F}_p$.
+        \item[(iv)]  $p\alpha = 0 \ \forall \alpha \in \mathbb{F}_q$.
+        \item[(v)] $\mathbb{F}_q$ es único salvo isomorfismo. 
+    \end{enumerate}
+\end{teorema}
+
+\begin{proposicion}\label{prop:bin}
+    Sea $\mathbb{F}_q$ un cuerpo finito de característica $p$ y $n \in \mathds{N}$. Entonces: $$(a + b)^{p^{n}} = a^{p^{n}} + b^{p^{n}}, \ \ \ \forall a, b \ \in \mathbb{F}_q.$$
+    $$(a - b)^{p^{n}} = a^{p^{n}} - b^{p^{n}}, \ \ \ \forall a, b \ \in \mathbb{F}_q.$$
+\end{proposicion}
+
+\begin{proof}
+
+Por el Teorema del binomio, se puede desarrollar la $n$-ésima potencia de un binomio. De esta forma tenemos que 
+
+\begin{equation}
+\label{eq:bin}
+    (a + b)^{p^{n}} =  \sum_{k=0}^{p^{n}} \binom{p^n}{k}a^{p^n-k}b^k = \binom{p^n}{0}x^{p^n} + \binom{p^n}{1}x^{p^n-1}y + \cdots + \binom{p^n}{p^n-1} xy^{p^n-1} + \binom{p^n}{p^n}y^{p^n}.
+\end{equation}
+
+Por otro lado, sabemos que 
+
+\begin{equation}
+    \binom{p^n}{k} = \frac{p^n!}{k!(p^n-k)!}.
+\end{equation}
+
+En consecuencia, $\binom{p^n}{k}$ es divisible por $p$ para $k \in \{1,\dots,p^n-1\}$.
+
+Entonces, todos los coeficientes de la ecuación anterior, salvo el primero y el último, son múltiplos de $p$, y, por tanto, en virtud del Teorema \ref{th:cf}, su valor es $0$.
+
+Así, $$(a + b)^{p^{n}} = a^{p^{n}} + b^{p^{n}}.$$
+
+La segunda igualdad se prueba de forma análoga teniendo en cuenta que 
+
+\begin{equation}
+    (a - b)^{p^{n}} =  \sum_{k=0}^{p^{n}} \binom{p^n}{k}(-1)^ka^{p^n-k}b^k.
+\end{equation}
+\end{proof}
+
+\subsection{Anillos de polinomios sobre cuerpos finitos}
+
+\begin{definicion}
+    Sea $\mathcal{A}$ un anillo conmutativo y $x$ un elemento que no pertenece a $\mathcal{A}$. Un polinomio con coeficientes en $\mathcal{A}$ es una expresión de la forma
+    $$a_nx^n + a_{n-1}x^{n-1} + \cdots + a_1x + a_0, \ \ n \in \mathds{N}, a_0,\dots ,a_n \in \mathcal{A}.$$
+\end{definicion}
+
+Dado un anillo $\mathcal{A}$ denotaremos por $\mathcal{A}[x]$ al conjunto de todos los polinomios con coeficientes en $\mathcal{A}$.
+
+\begin{definicion} Sea $\mathcal{A}$ un anillo y sean $p(x) = a_mx^m + \cdots + a_1x + a_0$ y $q(x) = b_nx^n + \cdots + b_1x + b_0$ dos elementos de $\mathcal{A}[x]$. Supongamos que $m \leq n$.
+
+    \begin{enumerate}
+        \item Se define la suma de los polinomios $p(x)$ y $q(x)$ como el polinomio $$p(x) + q(x) = b_nx^n + \cdots + b_{m+1}x^{m+1} + (a_m + b_m)x^m + \cdots + (a_1 + b_1)x + (a_0 + b_0).$$
+        \item Se define el producto de los polinomios $p(x)$ y $q(x)$ como el polinomio $$p(x)q(x) = a_mb_nx^{m + n} + \cdots + (b_0a_2 + b_1a_1 + b_2a_0)x^2 + (b_0a_1 + b_1a_0)x + a_0b_0.$$
+
+    \end{enumerate}
+    
+\end{definicion}
+
+Se comprueba fácilmente que si $\mathcal{A}[x]$ es un anillo conmutativo, entonces $\mathcal{A}[x]$  \emph{es también un anillo conmutativo} con las operaciones que acabamos de definir. Además, podemos identificar al anillo $\mathcal{A}$ como los elementos de $\mathcal{A}[x]$ de la forma $p(x) = a$, $a \in \mathcal{A}$. Por tanto, $\mathcal{A}$ es un subanillo de  $\mathcal{A}[x]$.
+
+Veamos ahora algunos conceptos referentes a polinomios.
+
+\begin{definicion} Sea $\mathcal{A}$ un anillo conmutativo y $p(x) = a_nx^n + \cdots + a_1x + a_0 \in \mathcal{A}$.
+
+    \begin{enumerate}
+        \item Si $a_n \neq 0$ se dice que el polinomio $p(x)$ tiene grado $n$ y se representa como $\gr(p(x)) = n$. Cuando $p(x) = 0$, consideraremos que su grado es $-\infty$. 
+        \item Al elemento $a_k \in \mathcal{A}$ se le llama \emph{coeficiente de grado} $k$.
+        \item El coeficiente de grado $n$ de un polinomio de grado $n$ se llama \emph{coeficiente líder}.
+        \item El coeficiente de grado $0$ de un polinomio se llama \emph{término independiente}.
+        \item Un polinomio cuyo coeficiente líder valga $1$ se dice que es un \emph{polinomio mónico}.
+    \end{enumerate}
+\end{definicion}
+
+\begin{proposicion} Sean $p(x),q(x) \in \mathcal{A}[x]$. Entonces:
+\begin{align*}
+    \gr(p(x) + q(x)) \leq& \max\{\gr(p(x)),\gr(q(x))\}, \\
+    \gr(p(x)q(x)) \leq& \gr(p(x)) + \gr(q(x)).
+ \end{align*}
+
+\end{proposicion}
+
+Una vez dada una pequeña introducción a los anillos de polinomios en anillos arbitrarios, vamos a enfocarnos en el caso que nos interesa para el desarrollo de este trabajo, es decir, cuando el anillo es un \emph{cuerpo finito}. El conjunto de polinomios con coeficientes en $\mathbb{F}_q$ se denota por $\mathbb{F}_q[x]$. Como ya se ha comentado en el caso general, este conjunto es un \emph{anillo conmutativo} y, de hecho, es un \emph{dominio de integridad}.
+\\ \\
+El anillo $\mathbb{F}_q[x]$ no solo juega un papel fundamental en la construcción de cuerpos finitos, sino también en la construcción de ciertas familias de códigos, como veremos a lo largo de este trabajo.
+
+Sean $f(x)$ y $g(x)$ polinomios en $\mathbb{F}_q[x]$, diremos que $f(x)$ divide a $g(x)$ si existe un polinomio $h(x) \in \mathbb{F}_q[x]$ tal que $g(x) = f(x)h(x)$ y este hecho lo denotamos por $f(x) \ | \ g(x)$. El polinomio $f(x)$ se llama \emph{divisor o factor} de $g(x)$. 
+
+El \emph{máximo común divisor} de $f(x)$ y $g(x)$, suponiendo que al menos uno de ellos no es nulo, es el polinomio mónico en $\mathbb{F}_q[x]$ de mayor grado que divide a ambos. El máximo común divisor de dos polinomios es \emph{único} y se denota como $\mcd(f(x),g(x))$. Diremos que $f(x)$ y $g(x)$ son \emph{coprimos} si $\mcd(f(x),g(x)) = 1$.
+
+
+El siguiente resultado nos dará las bases para definir posteriormente el algoritmo de Euclides.
+
+\begin{proposicion}\label{prop:div}
+Sean $f(x), g(x) \in \mathbb{F}_q[x]$ con $g(x) \neq 0$. Se verifican:
+\begin{enumerate}
+    \item[(i)] (Algoritmo de la división) Existen polinomios $h(x),r(x) \in \mathbb{F}_q[x]$ únicos tales que $$ f(x) = g(x)h(x) + r(x), \ \ \ \ \gr(r(x)) < \gr(g(x)).$$
+    \item[(ii)] Si $f(x) = g(x)h(x) + r(x)$, entonces $\mcd(f(x),g(x)) = \mcd(g(x),r(x))$.
+\end{enumerate}
+\end{proposicion}
+
+Utilizando este resultado de manera recursiva podemos hallar el máximo común divisor de dos polinomios. Este procedimiento se conoce como \emph{algoritmo de Euclides} y es análogo a su versión para números enteros.
+
+
+
+\begin{teorema}[Algoritmo de Euclides]\label{th:ae} Sean $f(x), g(x) \in \mathbb{F}_q[x]$ con $g(x) \neq 0$.
+    \begin{enumerate}
+        \item Realizar los siguientes pasos hasta que $r_n(x) = 0$ para algún $n$:
+            \begin{align*}
+                f(x)        &= g(x) h_1(x) + r_1(x), & &\text{donde } \gr(r_1(x)) < \gr(g(x)),\\
+                g(x)        &= r_1(x) h_2(x) + r_2(x),& &\text{donde } \gr(r_2(x)) < \gr(r_1(x)),\\
+                r_1(x)      &= r_2(x) h_3(x) + r_3(x),& &\text{donde } \gr(r_3(x)) < \gr(r_2(x)),\\
+                            \vdots\\
+                r_{n-3}(x)  &= r_{n-2}(x) h_{n-1}(x) + r_{n-1}(x),& &\text{donde } \gr(r_{n-1}(x)) < \gr(r_{n-2}(x)),\\
+                r_{n-2}(x)  &= r_{n-1}(x) h_{n}(x) + r_{n}(x),& &\text{donde } r_n(x) = 0.
+            \end{align*}
+            Entonces, $\mcd(f(x),g(x)) = cr_{n-1}(x)$, donde $c \in \mathbb{F}_q$ es una constante para que $cr_{n-1}(x)$ sea mónico.
+        \item Existen polinomios $a(x),b(x) \in \mathbb{F}_q[x]$ tales que $$ a(x)f(x) + b(x)g(x) = \mcd(f(x),g(x)).$$
+    \end{enumerate}
+    
+\end{teorema}
+
+Puesto que en el paso 1 el grado se reduce en al menos una unidad, podemos asegurar que la secuencia de pasos anterior acaba en algún momento.
+
+\begin{proposicion}\label{prop:dip}
+    Sea $\mathbb{F}_q$ un cuerpo, entonces $\mathbb{F}_q[x]$ es un dominio de ideales principales.
+\end{proposicion}
+
+\begin{proof}
+    Sea $I$ un ideal de $\mathbb{F}_q[x]$. Si $I$ es trivial entonces es principal ya que $\{0\} = 0\mathbb{F_q}[x]$ y $\mathbb{F}_q[x] = 1\mathbb{F}_q[x]$.
+    
+    Supongamos que $I$ es un ideal no trivial de $\mathbb{F}_q[x]$. Sea $p(x)$ el polinomio de menor grado en $I\setminus\{0\}$. Como $I$ es un ideal, $p(x)\mathbb{F}_q[x] \subseteq I \subseteq \mathbb{F}_q[x]$.
+    
+    Si $p(x)$ es un elemento $p$ de $\mathbb{F}_q\setminus\{0\}$, entonces $p(x)\mathbb{F}_q[x] = \mathbb{F}_q[x] = I$. Por tanto, $I$ es un ideal principal, pues está generado por un único elemento.
+    
+    Si, por el contrario, $p(x) \notin \mathbb{F}_q$, sea $a(x) \in I$ un polinomio al que $p(x)$ no divide. Esto es, $p(x) \nmid a(x)$. Por el algoritmo de la División \ref{prop:div}, existen dos polinomios $q(x),r(x) \in \mathbb{F}_q[x]$ tales que $a(x) = p(x)q(x) + r(x)$ y $\gr(r(x)) < \gr(p(x)), r(x) \neq 0$.
+
+    Sin embargo, 
+    $$a(x), p(x) \in I \Rightarrow a(x), p(x)q(x) \in I \Rightarrow r = a(x) - p(x)q(x) \in I.$$
+
+    Pero esto no es posible, puesto que habíamos dicho que $p(x)$ era el polinomio de menor grado en $I - \{0\}$. Hemos llegado a una contradicción. Así, $p(x) \ | \ a(x)$, $\forall a(x) \in I$. Por tanto, $I = p(x)\mathbb{F}_q[x]$ e $I$ es un ideal principal. 
+
+\end{proof}
+
+\subsection{Cuerpo de fracciones}
+
+Los cuerpos de fracciones son un tipo particular de cuerpo, que cobrará importancia cuando estudiemos los códigos convolucionales.
+
+Sea $D$ un dominio de integridad y consideremos en $D \times (D \backslash \{0\})$ la relación $(a,b) \R (c,d) \Leftrightarrow ad - bc = 0,$ que se comprueba trivialmente que es de equivalencia. Consideramos el conjunto cociente,
+$$ \frac{D \times (D \backslash \{0\})}{\R},$$ denotamos la clase del par $(a,b)$ por $a/b$ y  definimos las operaciones
+$$\frac{a}{b} + \frac{c}{d} = \frac{ad + bc}{bd}, \ \ \frac{a}{b}\cdot\frac{c}{d} = \frac{ac}{bd}$$ ($bd \neq 0$ por ser $D$ un dominio de integridad), que están bien definidas.
+
+El cero es $0/b$, la unidad es $a/a$ y el inverso de $a/b (a \neq 0)$ es $b/a$. Con estas operaciones, $$ \frac{D \times (D \backslash \{0\})}{\R}$$ es un cuerpo, al que llamaremos \emph{el cuerpo de fracciones} de $D$. 
+
+El cuerpo de fracciones de $D$ es el mínimo cuerpo que contiene a $D$.
+
+
+\subsection{Elementos primitivos}
+
+Cuando trabajamos con cuerpos finitos, necesitamos poder sumar y multiplicar de la manera más simple posible. Recordemos que por el Teorema \ref{th:cf}, sabemos que $\mathbb{F}_q$, donde $q = p^n$ con $p$ primo, es un espacio vectorial sobre $\mathbb{F}_p$ de dimensión $n$. De esta manera, la suma en $\mathbb{F}_q$ consistirá en la suma usual de $n$-tuplas sobre el cuerpo $\mathbb{F}_p$. Sin embargo, la multiplicación en $\mathbb{F}_q$ no es tan sencilla y por eso buscaremos una forma de expresar los elementos del cuerpo que simplifique esta operación.
+
+El conjunto $\mathbb{F}_q^*$ de los elementos no nulos de $\mathbb{F}_q$ es un \emph{grupo}. El siguiente teorema nos será de utilidad.
+
+\begin{teorema}\label{th:ep}
+  Se verifican las siguientes afirmaciones:
+  \begin{itemize}
+    \item[(i)] El grupo $\F_q^*$ es cíclico con respecto a la multiplicación y tiene orden $q-1$.
+    \item[(ii)] Si $\gamma$ es un generador de este grupo cíclico, entonces $$\mathbb{F}_q = \{0,1 = \gamma^0,\gamma,\gamma^2,\dots,\gamma^{q-2}\},$$ y $\gamma^i = 1$ si y solo si $(q-1) \ | \ i.$ 
+  \end{itemize}  
+\end{teorema}
+
+Cada generador $\gamma$ de $\mathbb{F}_q^*$ se llama \emph{elemento primitivo} de $\mathbb{F}_q$. Cuando los elementos no nulos de un cuerpo finito se expresan como potencias de $\gamma$, la multiplicación en el cuerpo se realiza de forma sencilla teniendo en cuenta que 
+
+$$\gamma^i\gamma^j = \gamma^{i+j} = \gamma^s, \text{   donde   } \ 0 \  \leq s \leq q-2 \text{  \  y  \  } i + j \equiv s \text{    (mod   }  \ q-1). $$
+
+Sea $\gamma$ un elemento primitivo de $\mathbb{F}_q$, entonces $\gamma^{q-1} = 1$ por definición. De esta manera $(\gamma^i)^{q-1} = 1$ para $0 \leq i \leq q-2$ probando que los elementos de $\mathbb{F}_q^*$ son las raíces de $x^{q-1} - 1 \in \mathbb{F}_p[x]$ y, por tanto, de $x^q - x$. Como $0$ es raíz de $x^q - x$, se tiene el siguiente teorema.
+
+\begin{teorema}\label{th:raiz}
+Las raíces del polinomio $x^q - x \in \mathbb{F}_p[x]$ son los elementos de $\mathbb{F}_q.$
+\end{teorema}
+
+\begin{definicion}
+    
+Un elemento $\xi \in \mathbb{F}_q$ es una \emph{$n$-ésima raíz de la unidad} si $\xi^n = 1$. Además, si $\xi^s \neq 1$ para $s \in \{1, \dots, n-1\}$, diremos que es una \emph{$n$-ésima raíz primitiva de la unidad}.
+\end{definicion}
+
+Un elemento primitivo $\gamma$ de $\mathbb{F}_q$ es, por tanto, una $(q-1)$-ésima raíz primitiva de la unidad. Se deduce del Teorema \ref{th:ep} que el cuerpo $\mathbb{F}_q$ contiene una $n$-ésima raíz primitiva de la unidad si y solo si $n \ | \ (q-1)$, en cuyo caso $\gamma^{(q-1)/n}$ es una $n$-ésima raíz primitiva de la unidad.
+
+
+\subsection{Automorfismos de cuerpos finitos}
+
+La siguiente definición nos será de utilidad a la hora de trabajar con anillos de  polinomios de Ore.
+
+\begin{definicion}
+Un \emph{automorfismo} $\sigma$ de $\mathbb{F}_q$ es una biyección $\sigma : \mathbb{F}_q \rightarrow \mathbb{F}_q$ que verifica:
+\begin{itemize}
+    \item $\sigma(\alpha + \beta) = \sigma(\alpha) + \sigma(\beta) \ \ \forall \alpha,\beta \in \mathbb{F}_q.$
+    \item  $\sigma(\alpha\beta) = \sigma(\alpha)\sigma(\beta) \ \ \forall \alpha,\beta \in \mathbb{F}_q.$
+\end{itemize}
+\end{definicion}
+
+La aplicación $\sigma_p: \mathbb{F}_q \rightarrow \mathbb{F}_q $, donde $q = p^n$ con $p$ primo, definida como $\sigma_p(\alpha) = \alpha^p$, $\forall \alpha \in \mathbb{F}_q$, es un \emph{automorfismo}. Obviamente, $\sigma_p(\alpha\beta) = (\alpha\beta)^p = (\alpha)^p(\beta)^p = \sigma_p(\alpha)\sigma_p(\beta)$, y $\sigma_p(\alpha + \beta) = (\alpha + \beta)^p = (\alpha^p + \beta^p) = \sigma_p(\alpha) + \sigma_p(\beta)$, donde se ha usado la Proposición \ref{prop:bin}. Además, el núcleo de la aplicación es $\{0\}$ y, por tanto, es un automorfismo, al que se le denomina \emph{automorfismo de Frobenius}. De manera análoga, definimos $\sigma_{p^r}(\alpha) =  \alpha^{p^r}$.
+
+El conjunto de automorfismos de $\mathbb{F}_q$ forma un grupo con respecto a la operación de composición de funciones. Este grupo se denota como Gal($\mathbb{F}_q$) y se llama el \emph{grupo de Galois} de $\mathbb{F}_q$. Así, definiremos el \emph{orden} de un automorfismo como el menor entero $n$ tal que $\sigma^n(\alpha) = \alpha$, $\forall \alpha \in \mathbb{F}_q$.
+
+\begin{teorema}
+    El grupo de Galois Gal($\mathbb{F}_q$), donde $p = q^n$ y $p$ es primo, es cíclico de orden $n$ y está generado por el automorfismo de Frobenius $\sigma_p$.
+\end{teorema}
+
+Dado un elemento $\alpha \in \mathbb{F}_q$, diremos que queda \emph{fijo} por un automorfismo $\sigma$ si $\sigma(\alpha) = \alpha$. El conjunto de los elementos de $\mathbb{F}_q$ que quedan fijos por un automorfismo $\sigma$ forma un subcuerpo de $\mathbb{F}_q$ y se denomina \emph{subcuerpo fijo de } $\mathbb{F}_q$ por $\sigma$, se denota por $\mathbb{F}_q^{\sigma}$.
+
+\subsection{Clases ciclotómicas y polinomios minimales}\label{sec:ciclo}
+
+Sea $\mathbb{E}$ una extensión de cuerpos finita de $\mathbb{F}_q$. Entonces $\mathbb{E}$ es un espacio vectorial sobre $\mathbb{F}_q$ y entonces $\mathbb{E} = \mathbb{F}_{q^t}$ para algún entero positivo $t$. Por el Teorema \ref{th:raiz}, cada elemento $\alpha$ de $\mathbb{F}_{q^t}$ es una raíz del polinomio $x^{q^t} - x$, luego, existe un polinomio mónico $M_{\alpha}(x) \in \mathbb{F}_q[x]$ cuyo grado es mínimo y contiene a $\alpha$ como raíz. Este polinomio se denomina \emph{polinomio minimal de } $\alpha$ sobre $\mathbb{F}_q$. En el siguiente teorema veremos algunos hechos elementales acerca de los polinomios minimales.
+
+\begin{teorema}
+Sea $\mathbb{F}_q \leq \mathbb{F}_{q^t}$ una extensión de cuerpos y sea $\alpha$ un elemento de $\mathbb{F}_{q^t}$ cuyo polinomio minimal es $M_{\alpha}(x) \in \mathbb{F}_q[x]$. Se verifican las siguientes afirmaciones:
+\begin{itemize}
+    \item[(i)] $M_{\alpha}(x)$ es irreducible en $\mathbb{F}_{q}$.
+    \item[(ii)] Si $g(x)$ es cualquier polinomio en $\mathbb{F}_{q}[x]$ tal que $g(\alpha) = 0$, entonces $M_{\alpha}(x) \ | \ g(x)$.
+    \item[(iii)] $M_{\alpha}(x)$ es único, es decir, existe un único polinomio mónico en $\mathbb{F}_q[x]$ de grado mínimo que tiene a $\alpha$ como raíz.
+\end{itemize} 
+\end{teorema}
+
+Sea $f(x)$ un polinomio irreducible en $\mathbb{F}_q$ de grado $r$. Podemos considerar la extensión generada por una de las raíces de $f(x)$ y obtenemos el cuerpo $\mathbb{F}_{q^r}$. El siguiente teorema nos afirma que en dicho caso, todas las raíces de $f(x)$ están en $\mathbb{F}_{q^r}$.
+
+\begin{teorema}
+Sea $f(x)$ un polinomio mónico irreducible en $\mathbb{F}_{q}$ de grado $r$. Entonces:
+\begin{itemize}
+    \item[(i)] Todas las raíces de $f(x)$ están en $\mathbb{F}_{q^r}$ y en cualquier extensión de cuerpos de $\mathbb{F}_{q}$ generada por una de sus raíces.
+    \item[(ii)] $f(x) = \prod_{i=1}^{r}(x-\alpha_i)$, donde $\alpha_i \in \mathbb{F}_{q^r}$, para $i \in \{1,\dots,r\}$.
+    \item[(iii)] El polinomio $f(x)$ divide a $x^{q^r} - x$.
+\end{itemize}
+\end{teorema}
+
+En particular, este teorema se verifica para los polinomios minimales $M_{\alpha}(x)$ en $\mathbb{F}_q$ dado que estos polinomios son mónicos e irreducibles.
+
+\begin{teorema}\label{th:1.pm}
+    Sea \( \mathbb{F}_q  \leq \mathbb{F}_{q^t} \) una extensión de cuerpos, y sea \( \alpha \) un elemento de \( \mathbb{F}_{q^t} \) con polinomio minimal \( M_{\alpha}(x) \) en \( \mathbb{F}_q[x] \). Se verifican las siguientes afirmaciones:
+    \begin{itemize}
+      \item[(i)] El polinomio \( M_{\alpha}(x) \) divide a \( x^{q^t} - x \).
+      \item[(ii)] El polinomio \( M_{\alpha}(x) \) tiene raíces distintas que pertenecen a \( \mathbb{F}_{q^t} \).
+      \item[(iii)] El grado de \( M_{\alpha}(x) \) divide a \( t \).
+      \item[(iv)] $ x^{q^t} - x = \prod_{\alpha}M_\alpha(x)$, donde $\alpha$ varía entre un subconjunto de $\mathbb{F}_{q^t}$ de forma que enumera los polinomios minimales de todos los elementos de $\mathbb{F}_{q^t}$ una única vez.
+      \item[(v)] $ x^{q^t} - x = \prod_{f}f(x)$, donde $f$ varía entre todos los polinomios mónicos irreducibles en $\mathbb{F}_q$ cuyo grado divide a $t$.
+    \end{itemize}
+    \end{teorema}
+
+    \begin{definicion}
+    Dos elementos de $\mathbb{F}_{q^t}$ son \emph{conjugados} en $\mathbb{F}_{q}$ si tienen el mismo polinomio minimal en $\mathbb{F}_{q}[x]$.
+    \end{definicion}
+
+    Será de importancia encontrar todos los conjugados de $\alpha \in \mathbb{F}_q$, es decir, las raíces de $M_\alpha(x)$. Sabemos por el Teorema \ref{th:1.pm} que todas sus raíces son distintas y están en $\mathbb{F}_{q^t}$. Podremos encontrar estas raíces con ayuda del siguiente teorema.
+
+    \begin{teorema}
+        Sea $f(x)$ un polinomio en $\mathbb{F}_q[x]$ y sea $\alpha$ una raíz de $f(x)$ en alguna extensión $\mathbb{F}_{q^t}$. Entonces:
+        \begin{itemize}
+            \item[(i)] $f(x^q) = f(x)^q$
+            \item[(ii)] $\alpha^q$ es también una raíz de $f(x)$ en $\mathbb{F}_q$.
+        \end{itemize} 
+        
+    \end{teorema}
+
+    \begin{proof}
+        \textit{(i). } Sea $f(x) = \sum_{i=0}^{m}a_ix^i$. Puesto que $q = p^n$, donde $p$ es la característica de $\mathbb{F}_q$, se tiene que aplicando la Proposición \ref{prop:bin}, $f(x)^q = \sum_{i=0}^{m}a_i^qx^{iq}$. Sin embargo, $a_i^q = a_i$, ya que por el Teorema \ref{th:raiz}, los elementos de $\mathbb{F}_q$ son las raíces de $x^q - x$, lo que prueba \textit{(i)}. En particular, $f(\alpha^p) = f(\alpha)^q = 0$, probando \textit{(ii)}.
+    \end{proof}
+
+ Aplicando iteradamente el teorema anterior obtenemos que $\alpha,\alpha^q,\alpha^{q^2},\dots$ son raíces de $M_\alpha(x)$. La secuencia anterior terminará tras $r$ términos, siendo $r$ el menos entero tal que $\alpha^{q^r} = \alpha$.
+
+ Sea $\gamma$ un elemento primitivo de $\mathbb{F}_{q^t}$, entonces $\alpha = \gamma^s$ para algún $s$. Así, $\alpha^{q^r} = \alpha$ si y solo si $\gamma^{sq^r - s} = 1$. Por el Teorema \ref{th:ep}, $sq^r \equiv s \text{  (mod} \ \ q^t - 1)$. En base a esto, definimos la \emph{clase $q$-ciclotómica de $s$ módulo $q^t - 1$} como el conjunto
+
+ $$C_s = \{s,sq,\dots,sq^{r-1}\} \text{  (mod} \ \ q^t - 1),$$
+
+ donde $r$ es el entero positivo más pequeño tal que $sq^r \equiv s \text{  (mod} \ \ q^t - 1)$. Los conjuntos $C_s$ dividen el conjunto de enteros $\{0,1,\dots,q^t-2\}$ en conjuntos disjuntos.
+
+ \begin{ejemplo}
+Las clases $2$-ciclotómicas módulo $15$ son $C_0 = \{0\},C_1 = \{1,2,4,8\}, C_3 = \{3,6,12,9\}, C_5 = \{5,10\} \ \text{ y } \ C_7 = \{7,14,13,11\}$.
+ \end{ejemplo}
+
+Ahora sabemos que las raíces de $M_\alpha(x) = M_{\gamma^s}(x)$ contienen a $\{\gamma^i \ | \ i \in C_s\}$. De hecho, estas son todas las raíces. Por tanto, si conocemos el tamaño de $C_s$, sabremos el grado de $M_\alpha(x)$.
+
+\begin{teorema}\label{th:1.ult}
+    Si $\gamma$ es un elemento primitivo de $\mathbb{F}_{q^t}$, entonces el polinomio minimal de $\gamma^s$ en $\mathbb{F}_q$ es $$ M_{\gamma^s}(x) = \prod_{i \in C_s} (x - \gamma^i). $$
+\end{teorema}
+
+\section{Módulos}
+
+\subsection{Conceptos básicos de módulos}
+
+En esta sección veremos una estructura algebraica muy importante para el estudio de los códigos convolucionales: los módulos. Las principales fuentes para la redacción de esta sección han sido \cite{wisbauer1991foundations} y \cite{cccheide}.
+
+Informalmente, un módulo es un ”espacio vectorial“  sobre un anillo y no sobre un cuerpo. Este anillo puede ser (o no) conmutativo.
+
+\begin{definicion}
+Sea $\mathcal{R}$ un anillo, entonces un $\mathcal{R}$-módulo por la izquierda $M$ es un grupo abeliano $(M,+)$ y una operación $\cdot : \mathcal{R} \times M \rightarrow M$ tales que $\forall r,s \in \mathcal{R}$, $\forall x,y \in  M$ se tiene:
+\begin{enumerate}
+    \item $(rs)x = r(sx)$.
+    \item $(r + s)x = rx + sx$.
+    \item $r(x + y) = rx + ry$.
+    \item $1x = x$.
+\end{enumerate}
+
+La definición de los $\mathcal{R}$-módulos por la derecha es análoga, sólo que el anillo actúa \emph{por la derecha}, es decir, se define una multiplicación escalar de la forma $\cdot :  M \times \mathcal{R}  \rightarrow M$.
+\end{definicion}
+
+Cuando $\mathcal{R}$ es conmutativo, hablaremos simplemente de $\mathcal{R}$-módulos.
+
+\begin{ejemplo} \label{ej:mod}
+    Veamos algunos ejemplos de módulos.
+    
+    \begin{enumerate}
+        \item Sea $V$ un espacio vectorial sobre un cuerpo $K$, entonces $V$ es un $K$-módulo.
+        \item Sea $(\mathcal{A},+,\cdot)$ un anillo. Entonces, $\mathcal{A}$ es un módulo por la izquierda y por la derecha sobre sí mismo utilizando su producto.
+    \end{enumerate}
+    \end{ejemplo}
+
+\begin{definicion}
+Sea $M$ un $\mathcal{R}$-módulo por la izquierda. Un \emph{submódulo} $N$ de $M$ es un subgrupo de $(M,+)$ cerrado para la multiplicación con elementos en $\mathcal{R}$, es decir, $rn \in N$ para todo $r \in \mathcal{R}, n \in N$.
+\end{definicion}
+
+De esta forma, $N$ también es un $\mathcal{R}$-módulo con la operación $\cdot : \mathcal{R} \times N \rightarrow N.$
+
+\begin{definicion}
+Se dice que un $\mathcal{R}$-módulo $M$ es \emph{simple} si sus únicos submódulos son $\{0\}$ y $M$.
+\end{definicion}
+
+\begin{definicion}
+Sea $M$ un $\mathcal{R}$-módulo, sean $N,N_1,N_2$ dos subconjuntos no vacíos de $M$ y sea $A \subset \mathcal{R}$. Entonces definimos:
+$$N_1 + N_2 = \{n_1 + n_2 \ | \ n_1 \in N_1, n_2 \in N_2\} \subset M,$$
+$$ AN = \left\{\sum_{i=1}^{k}a_in_i \ | \ a_i \in A, n_i \in N, k \in \N \right\} \subset M.$$
+\end{definicion}
+
+Si $N_1$ y $N_2$ son submódulos, entonces $N_1 + N_2$ es también un submódulo de $M$. Además, para un ideal por la izquierda $A \subset \mathcal{R}$, el producto $AN$ es siempre un submódulo de $M$.
+
+\begin{definicion}
+Sean $M_1,M_2$ submódulos de un $\mathcal{R}$-módulo $M$. Si $M = M_1 + M_2$ y $M_1 \cap M_2 = \{0\}$, entonces se dice que $M$ es una \emph{suma directa} de $M_1$ y $M_2$. Se denota como $M = M_1 \oplus M_2$. 
+\end{definicion}
+
+En este caso, cada $m \in M$ se calcula de forma única como $m = m_1 + m_2$, con $m_1 \in M_1$, $m_2 \in M_2$. Los submódulos $M_1$ y $M_2$ se llaman \emph{sumandos directos} de $M$.
+
+\subsection{Módulos libres}
+
+\begin{definicion}
+Sea $M$ un $\mathcal{R}$-módulo por la izquierda y sea $I$ un conjunto arbitrario de índices. Diremos que un conjunto $\{e_i\ : i \in I\}$ \emph{genera} $M$ si cualquier elemento $m \in M$ puede escribirse como una combinación lineal $m = \sum_{i \in S} \lambda_ie_i$, siendo $S \subset I$ finito. Si además este conjunto es linealmente independiente, diremos que es una \emph{base} de $M$.
+\end{definicion} 
+
+\begin{teorema}
+    Sea $M$ un $\mathcal{R}$-módulo. Equivalen las siguientes afirmaciones.
+
+    \begin{itemize}
+        \item[(i)] M tiene una base $\{e_i : i \in I\}$.
+        \item[(ii)] $M \cong \bigoplus_{i \in I} \mathcal{R}$.
+    \end{itemize}
+\end{teorema}
+
+\begin{definicion}
+Un \emph{módulo libre} es un $\mathcal{R}$-módulo por la izquierda $M$ que posee una base. El \emph{rango} de $M$ es la cardinalidad de la base.
+\end{definicion}
+
+\subsection{El módulo $\F[t]^n$}
+
+En el ejemplo \ref{ej:mod} vimos que un anillo es un módulo sobre sí mismo. 
+
+Sea $\F[t]$ un anillo de polinomios con coeficientes en un cuerpo finito $\F$. Entonces, $$\F[t]^n := \{(v_1,\dots,v_n) \ | \ v_i \in \F[t], i=1,\dots,n\}.$$
+
+En esta sección veremos dos resultados referentes a los submódulos y sumandos directos de $\F[t]^n$. Estos resultados pueden encontrarse en \cite{cccheide} y se omitirán las demostraciones.
+
+\begin{proposicion}
+Sea $V$ un submódulo de $\F[t]^n$. Se verifican las siguientes afirmaciones
+\begin{itemize}
+    \item[(i)] $V$ es un módulo libre y su rango es finito.
+    \item[(ii)] Si $v_1,\dots,v_r \in \F[t]^n$ forman un conjunto generador de $V$, entonces $V =  Im(M) = \{uM \ | \ u \in \F[t]^r\}$ donde \begin{equation}\label{eq:modma} M := \left[ \begin{array}{c} v_1 \\ \vdots \\ v_r \end{array} \right]  \in \F[t]^{r \times n}. \end{equation} Llamaremos a $M$ matriz generadora de $V$.
+    \item[(iii)] Sean $P \in  \F[t]^{r \times r}$ y $M$ como en (ii). Entonces $V = Im(PM) \Leftrightarrow P$ es invertible sobre $\F[t]$.
+\end{itemize}
+\end{proposicion}
+
+\begin{proposicion} \label{prop:cc3}
+Sea $V \subseteq \F[t]^n$ un submódulo y sea $v_1,v_2,\dots,v_r \in \F[t]^n$ un conjunto generador de $V$. Sea $M$ la matriz \eqref{eq:modma}. Equivalen las siguientes afirmaciones.
+\begin{itemize}
+    \item[(i)] $V$ es un sumando directo de $\F[t]^n$.
+    \item[(ii)] Cualquier base de $V$ puede ser completada a una base de $\F[t]^n$ .
+    \item[(iii)] La forma normal de Smith de $M$ está dada por la matriz $\left( \begin{array}{cc} I_k & 0 \\ 0 & 0 \end{array}\right)$, donde $k$ es el rango de $V$.
+    \item[(iv)] Si $\{v_1,\dots,v_r\}$ es una base de $V$ (equivalentemente, si $r$ es el rango de $V$), entonces $M$ es invertible por la derecha.
+    \item[(v)] Para todo $v \in \F[t]^n$ y todo $\lambda \in \F[t] \backslash \{0\}$ se tiene que \begin{equation}\label{eq:modu1} \lambda v \in V \Rightarrow v \in V.\end{equation}
+    \item[(vi)] Existe una matriz $N \in \F[t]^{n \times 1}$ tal que $V = \ker N := \{v \in \F[t]^n \ | \ vN = 0\}$.
+    \item[(vii)] Para todos los submódulos $W \in \F[t]^n$ con el mismo rango de $V$ se tiene que $$V \subseteq W \Rightarrow V = W.$$  
+\end{itemize}
+
+Una matriz con la propiedad (iii) se dirá que es básica.
+
+\end{proposicion}
+
+\endinput
