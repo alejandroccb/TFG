@@ -1,0 +1,59 @@
+% !TeX root = ../libro.tex
+% !TeX encoding = utf8
+%
+%*******************************************************
+% Summary
+%*******************************************************
+
+\selectlanguage{english}
+\addchap*{Summary}
+
+The primary objective of this project is to explore skew cyclic convolutional codes, a subclass of convolutional codes notable for their algebraic structure, which facilitates the design of efficient decoding algorithms. Additionally, we will present and implement a Sugiyama-like algorithm for decoding these codes using SageMath software.
+
+\spacedlowsmallcaps{Chapter 1}
+
+In this chapter, we will introduce the mathematical tools necessary for developing the coding theory addressed in this work. We will start by presenting the theory of rings and ideals, discussing some of their most important properties. Next, we will study finite fields, which are essential for the construction of codes. We will also cover the field of rational functions, which will be fundamental for constructing convolutional codes. Finally, we will provide a brief introduction to module theory, including basic definitions and properties of modules, as well as some important results about submodules and free modules.
+
+\spacedlowsmallcaps{Chapter 2}
+
+In the second chapter, we will cover some of the fundamentals of block coding theory, focusing primarily on linear codes. We will begin with the most basic definition of a code, i.e., a subset of a finite field. Next, we will define the concept of a linear code, adding a vector space structure to codes that will allow us to use more powerful tools from linear algebra. We will delve into the properties of these codes, including their generator and parity-check matrices, which allow us to uniquely define linear codes. Additionally, we will explore Hamming weight and Hamming distance, essential metrics for measuring the error-correcting performance of a code. Then, we will study a subclass of linear codes known as cyclic codes, which possesses a cyclic structure that allows more efficient encoding and decoding algorithms. Finally, we will discuss BCH and Reed-Solomon codes, known for their strong error-correcting abilities, and the Sugiyama algorithm used for decoding BCH codes.
+
+\spacedlowsmallcaps{Chapter 3}
+
+In this chapter, we delve into convolutional codes, a class of codes different from block codes, characterized by their use of previous message information in encoding, giving them a "memory". We will discuss the mathematical foundations needed, such as the theory of generator matrices, and explain how convolutional codes are defined using the field of rational functions. We also present the encoding process using polynomial matrices. The chapter further examines the concept of canonical generator matrices, their properties, and the criteria for a matrix to be considered canonical. Then, we link convolutional codes to module theory, showing how they can be viewed as submodules of free modules. Finally, we will examine the free distance of convolutional codes, analyzing its importance in determining the error-detecting and correcting capabilities of these codes, while also exploring the generalized Singleton bound, which offers an upper limit for the free distance.
+
+\spacedlowsmallcaps{Chapter 4}
+
+The fourth chapter focuses on the study of skew cyclic convolutional codes (SCCC). We will begin by introducing Ore polynomial rings, which are crucial for defining these codes, particularly focusing on the case where the coefficients of the skew polynomial ring are in a field. We will introduce the main concepts, as well as algorithms to calculate division from the left or right, and an extended Euclid algorithm, which will be fundamental for the construction of a Sugiyama-like algorithm. Then, we will define skew cyclic convolutional codes and provide a method for their construction. Finally, we will present skew Reed-Solomon convolutional codes, detailing their construction and proving their maximum distance separable property with respect to the Hamming distance, which ensures their optimal error-correcting capabilities.
+
+\spacedlowsmallcaps{Chapter 5}
+
+Finally, we will introduce the algorithm that serves as the main objective of this project: the Sugiyama algorithm for skew Reed-Solomon convolutional codes. We will provide a detailed explanation of the decoding process, showing how this algorithm effectively corrects errors in transmitted data, ensuring the accuracy and reliability of communication systems.
+
+To carry out this project, the following classes have been implemented in SageMath:
+
+\begin{itemize}
+    \item \texttt{BCHSugiyamaDecoder}: A decoder class implementing the Sugiyama algorithm for BCH codes, calculating syndromes and error correction.
+    \item \texttt{SkewRSConvolutionalCode}: A class defining skew Reed-Solomon convolutional codes, including generator polynomial validation and properties.
+    \item \texttt{SkewRSConvolutionalEncoder}: An encoder class for Skew Reed-Solomon convolutional odes, handling the encoding and unencoding processes.
+    \item \texttt{SkewRSSugiyamaDecoder}: A decoder class using a Sugiyama-like algorithm to decode skew Reed-Solomon convolutional codes, correcting errors through syndrome computation and solving the key equation.
+\end{itemize}
+
+To ensure the correct functioning of these classes, a series of tests have been developed using the Pytest tool. For the examples in this project, both the pre-existing SageMath classes and the newly implemented classes have been used.
+
+The documentation for these classes can be found in Appendix \ref{ap:codigo}.
+
+\paragraph{\textsc{Keywords}}
+\begin{inparaitem}[\hspace{1em}]
+  \item coding theory,
+  \item block codes,
+  \item cyclic codes,
+  \item convolutional codes,
+  \item SageMath,
+  \item Sugiyama algorithm.
+\end{inparaitem}
+
+
+ 
+\selectlanguage{spanish} 
+\endinput
